@@ -5,6 +5,7 @@ import 'package:diplome_nick/data/utils/localization.dart';
 import 'package:diplome_nick/data/utils/router.gr.dart';
 import 'package:diplome_nick/main.dart';
 import 'package:diplome_nick/ui/bloc/bloc.dart';
+import 'package:diplome_nick/ui/widgets/bottom_dialog.dart';
 import 'package:diplome_nick/ui/widgets/toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -30,8 +31,11 @@ class FirebaseBloc implements BaseBloc{
   load() async {
     fbAuth = FirebaseAuth.instance;
     fbAuth.authStateChanges().listen((User? user) {
-      debugPrint("USER CHANGE: $user");
+      //debugPrint("USER CHANGE: $user");
       fbUser = fbAuth.currentUser;
+      if(fbUser != null){
+        isAsAdministrator = fbUser!.email!.contains(adminEmail);
+      }
     });
   }
 
@@ -55,57 +59,22 @@ class FirebaseBloc implements BaseBloc{
           });
           await createUserProfile(user.user!, name, email);
           await fbAuth.signOut();
-          Toast.show(
-            context: context,
-            text: AppLocalizations.of(context, 'sign_up_success'),
-            icon: const Icon(
-              Icons.check_circle_outline,
-              color: Colors.green,
-            )
-          );
+          showInfoDialog(context, AppLocalizations.of(context, 'sign_up_success'));
           onSuccess();
         }
       } on FirebaseAuthException catch (e) {
-        Toast.show(
-          context: context,
-          text: e.message.toString(),
-          icon: const Icon(
-            Icons.error_outline,
-            color: Colors.red,
-          )
-        );
+        showInfoDialog(context, e.message.toString());
       }
     }
     else{
       if(!emailValidated(email)){
-        Toast.show(
-          context: context,
-          text: AppLocalizations.of(context, 'error_email'),
-          icon: const Icon(
-            Icons.error_outline,
-            color: Colors.red,
-          )
-        );
+        showInfoDialog(context, AppLocalizations.of(context, 'error_email'));
       }
       if(!nameValidated(name)){
-        Toast.show(
-          context: context,
-          text: AppLocalizations.of(context, 'error_name'),
-          icon: const Icon(
-            Icons.error_outline,
-            color: Colors.red,
-          )
-        );
+        showInfoDialog(context, AppLocalizations.of(context, 'error_name'));
       }
       if(!passwordValidated(email)){
-        Toast.show(
-          context: context,
-          text: AppLocalizations.of(context, 'error_password'),
-          icon: const Icon(
-            Icons.error_outline,
-            color: Colors.red,
-          )
-        );
+        showInfoDialog(context, AppLocalizations.of(context, 'error_password'));
       }
     }
   }
@@ -131,27 +100,13 @@ class FirebaseBloc implements BaseBloc{
             });
           }
           else{
-            Toast.show(
-              context: context,
-              text: AppLocalizations.of(context, 'login_verify'),
-              icon: const Icon(
-                Icons.error_outline,
-                color: Colors.red,
-              )
-            );
+            showInfoDialog(context, AppLocalizations.of(context, 'login_verify'));
             await fbAuth.signOut();
           }
         }
       }
     } on FirebaseAuthException catch (e) {
-      Toast.show(
-        context: context,
-        text: e.message.toString(),
-        icon: const Icon(
-          Icons.error_outline,
-          color: Colors.red,
-        )
-      );
+      showInfoDialog(context, e.message.toString());
     }
   }
 

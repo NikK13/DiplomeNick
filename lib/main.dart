@@ -3,6 +3,7 @@ import 'package:diplome_nick/data/utils/guards.dart';
 import 'package:diplome_nick/data/utils/localization.dart';
 import 'package:diplome_nick/data/utils/router.gr.dart';
 import 'package:diplome_nick/data/utils/styles.dart';
+import 'package:diplome_nick/ui/bloc/app_bloc.dart';
 import 'package:diplome_nick/ui/bloc/fb_bloc.dart';
 import 'package:diplome_nick/ui/provider/prefsprovider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_strategy/url_strategy.dart';
 
+late AppBloc appBloc;
 late FirebaseBloc firebaseBloc;
 late PreferenceProvider prefsProvider;
 
@@ -34,6 +36,7 @@ void main() async{
   );
   await AppLocalizations.loadLanguages();
   firebaseBloc = FirebaseBloc();
+  appBloc = AppBloc();
   if(kIsWeb) setPathUrlStrategy();
   runApp(
     MultiProvider(

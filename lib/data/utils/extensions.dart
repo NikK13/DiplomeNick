@@ -152,16 +152,13 @@ int crossAxisCountOnWidth(BuildContext context){
   if(MediaQuery.of(context).size.width < 300){
     return 1;
   }
-  if(MediaQuery.of(context).size.width < 500){
+  if(MediaQuery.of(context).size.width < 600){
     return 2;
   }
-  if(MediaQuery.of(context).size.width < 800){
+  if(MediaQuery.of(context).size.width < 1000){
     return 3;
   }
-  if(MediaQuery.of(context).size.width < 1200){
-    return 4;
-  }
-  return 5;
+  return 4;
 }
 
 String formattedDate(bool is12h, String date){

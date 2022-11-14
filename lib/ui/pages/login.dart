@@ -5,6 +5,7 @@ import 'package:diplome_nick/data/utils/localization.dart';
 import 'package:diplome_nick/data/utils/router.gr.dart';
 import 'package:diplome_nick/data/utils/styles.dart';
 import 'package:diplome_nick/main.dart';
+import 'package:diplome_nick/ui/widgets/bottom_dialog.dart';
 import 'package:diplome_nick/ui/widgets/button.dart';
 import 'package:diplome_nick/ui/widgets/input.dart';
 import 'package:diplome_nick/ui/widgets/loading.dart';
@@ -188,14 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                                             setState(() => _isInProgress = false);
                                           }
                                           else{
-                                            Toast.show(
-                                              context: context,
-                                              text: AppLocalizations.of(context, 'empty_fields'),
-                                              icon: const Icon(
-                                                Icons.error_outline,
-                                                color: Colors.red,
-                                              )
-                                            );
+                                            showInfoDialog(context, AppLocalizations.of(context, 'empty_fields'));
                                           }
                                         },
                                       ),

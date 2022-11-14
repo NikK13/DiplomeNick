@@ -36,15 +36,15 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
           backgroundColor: appColor,
           actions: [
             IconButton(
-                onPressed: () async{
-                  await firebaseBloc.signOutUser();
-                  loadingFuture = Future.value(true);
-                  context.router.replaceAll([const LoginPageRoute()]);
-                },
-                icon: const Icon(
-                  Icons.logout,
-                  color: Colors.white,
-                )
+              onPressed: () async{
+                await firebaseBloc.signOutUser();
+                loadingFuture = Future.value(true);
+                context.router.replaceAll([const LoginPageRoute()]);
+              },
+              icon: const Icon(
+                Icons.logout,
+                color: Colors.white,
+              )
             )
           ],
           leading: IconButton(
@@ -56,80 +56,83 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
           ),
         ),
         drawerEnableOpenDragGesture: false,
-        drawer: Drawer(
-          backgroundColor: backgroundColor(context),
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              UserAccountsDrawerHeader(
-                decoration: const BoxDecoration(
-                  color: appColor
-                ),
-                accountName: Text(
-                  firebaseBloc.fbUser!.email!.contains(adminEmail) ?
-                  "Administrator" : firebaseBloc.fbUser!.email!,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
+        drawer: SizedBox(
+          width: 220,
+          child: Drawer(
+            backgroundColor: backgroundColor(context),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                UserAccountsDrawerHeader(
+                  decoration: const BoxDecoration(
+                    color: appColor
+                  ),
+                  accountName: Text(
+                    firebaseBloc.fbUser!.email!.contains(adminEmail) ?
+                    "Administrator" : firebaseBloc.fbUser!.email!,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  accountEmail: Text(
+                    firebaseBloc.fbUser!.email!,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundColor: Colors.grey.shade700,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.grey.shade800,
+                      size: 38,
+                    ),
                   ),
                 ),
-                accountEmail: Text(
-                  firebaseBloc.fbUser!.email!,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
+                ListTile(
+                  leading: Icon(
+                    Icons.airplane_ticket_outlined,
+                    color: accent(context),
                   ),
-                ),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.grey.shade700,
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.grey.shade800,
-                    size: 38,
+                  title: Text(
+                    AppLocalizations.of(context, 'tickets')
                   ),
+                  onTap: () {
+                    setState(() => _currentIndex = 0);
+                    context.navigateTo(const TicketsFragmentRoute());
+                    Navigator.pop(context);
+                  },
                 ),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.airplane_ticket_outlined,
-                  color: accent(context),
+                ListTile(
+                  leading: Icon(
+                    Icons.flight,
+                    color: accent(context),
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context, 'flights')
+                  ),
+                  onTap: () {
+                    setState(() => _currentIndex = 1);
+                    context.navigateTo(const FlightsFragmentRoute());
+                    Navigator.pop(context);
+                  },
                 ),
-                title: Text(
-                  AppLocalizations.of(context, 'tickets')
+                ListTile(
+                  leading: Icon(
+                    CupertinoIcons.settings,
+                    color: accent(context),
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context, 'settings')
+                  ),
+                  onTap: () {
+                    setState(() => _currentIndex = 2);
+                    context.navigateTo(SettingsFragmentRoute());
+                    Navigator.pop(context);
+                  },
                 ),
-                onTap: () {
-                  setState(() => _currentIndex = 0);
-                  context.navigateTo(const TicketsFragmentRoute());
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.flight,
-                  color: accent(context),
-                ),
-                title: Text(
-                  AppLocalizations.of(context, 'flights')
-                ),
-                onTap: () {
-                  setState(() => _currentIndex = 1);
-                  context.navigateTo(const FlightsFragmentRoute());
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  CupertinoIcons.settings,
-                  color: accent(context),
-                ),
-                title: Text(
-                  AppLocalizations.of(context, 'settings')
-                ),
-                onTap: () {
-                  setState(() => _currentIndex = 2);
-                  context.navigateTo(SettingsFragmentRoute());
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         body: SafeArea(

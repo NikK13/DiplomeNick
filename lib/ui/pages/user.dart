@@ -6,7 +6,6 @@ import 'package:diplome_nick/data/utils/router.gr.dart';
 import 'package:diplome_nick/data/utils/styles.dart';
 import 'package:diplome_nick/main.dart';
 import 'package:diplome_nick/ui/widgets/loading.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,24 +21,8 @@ class _HomeUserPageState extends State<HomeUserPage> {
 
   @override
   void initState() {
-    _ticketsFuture = _loadTickets();
+    _ticketsFuture = appBloc.loadTickets();
     super.initState();
-  }
-
-  Future<List<Ticket>?> _loadTickets() async{
-    final query = await FirebaseDatabase.instance.ref("tickets").once();
-    if(query.snapshot.exists){
-      final List<Ticket> tickets = [];
-      final data = query.snapshot.children;
-      for(var item in data){
-        final ticket = Ticket.fromJson(item.value as Map<String, dynamic>);
-        tickets.add(ticket);
-      }
-      return tickets;
-    }
-    else{
-      return [];
-    }
   }
 
   @override
@@ -87,7 +70,7 @@ class _HomeUserPageState extends State<HomeUserPage> {
                   shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossAxisCountOnWidth(context),
-                    childAspectRatio: 1
+                    childAspectRatio: 1.35
                   ),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index){
