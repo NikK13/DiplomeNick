@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:diplome_nick/data/model/ticket.dart';
+import 'package:diplome_nick/data/model/flight.dart';
 import 'package:diplome_nick/data/utils/extensions.dart';
 import 'package:diplome_nick/data/utils/localization.dart';
 import 'package:diplome_nick/data/utils/router.gr.dart';
@@ -17,11 +17,9 @@ class HomeUserPage extends StatefulWidget {
 }
 
 class _HomeUserPageState extends State<HomeUserPage> {
-  late Future<List<Ticket>?> _ticketsFuture;
-
   @override
   void initState() {
-    _ticketsFuture = appBloc.loadTickets();
+    appBloc.callStreams();
     super.initState();
   }
 
@@ -31,7 +29,7 @@ class _HomeUserPageState extends State<HomeUserPage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          AppLocalizations.of(context, 'tickets'),
+          AppLocalizations.of(context, 'flights'),
           style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: appColor,
@@ -61,52 +59,19 @@ class _HomeUserPageState extends State<HomeUserPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8),
-        child: FutureBuilder(
-          future: _ticketsFuture,
-          builder: (context, AsyncSnapshot<List<Ticket>?> snapshot){
+        child: StreamBuilder(
+          stream: appBloc.flightsStream,
+          builder: (context, AsyncSnapshot<List<Flight>?> snapshot){
             if(snapshot.hasData){
               if(snapshot.data!.isNotEmpty){
                 return GridView.builder(
                   shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossAxisCountOnWidth(context),
-                    childAspectRatio: 1.35
                   ),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index){
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(width: 1, color: Colors.grey)
-                      ),
-                      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                      padding: const EdgeInsets.all(15),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              snapshot.data![index].title!,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              snapshot.data![index].date!,
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w400
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ),
-                      ),
-                    );
+                    return FlightItem(flight: snapshot.data![index]);
                   },
                 );
               }

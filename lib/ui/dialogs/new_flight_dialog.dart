@@ -1,5 +1,4 @@
 import 'package:diplome_nick/data/utils/constants.dart';
-import 'package:diplome_nick/data/utils/extensions.dart';
 import 'package:diplome_nick/data/utils/lists.dart';
 import 'package:diplome_nick/data/utils/localization.dart';
 import 'package:diplome_nick/main.dart';
@@ -8,7 +7,6 @@ import 'package:diplome_nick/ui/widgets/button.dart';
 import 'package:diplome_nick/ui/widgets/dialog.dart';
 import 'package:diplome_nick/ui/widgets/dropdown.dart';
 import 'package:diplome_nick/ui/widgets/input.dart';
-import 'package:diplome_nick/ui/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';

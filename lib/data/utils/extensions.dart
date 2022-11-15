@@ -85,7 +85,7 @@ Widget getIconButton({required Widget child, required BuildContext context, Func
   onTap: onTap,
   child: Container(
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(16.0),
+      borderRadius: BorderRadius.circular(12.0),
       color: color ?? (Theme.of(context).brightness == Brightness.light ?
       const Color.fromRGBO(255, 255, 255, 1) : Colors.black26),
       boxShadow: [
@@ -149,16 +149,16 @@ void showSnackBar(context, text) {
 }
 
 int crossAxisCountOnWidth(BuildContext context){
-  if(MediaQuery.of(context).size.width < 300){
-    return 1;
-  }
-  if(MediaQuery.of(context).size.width < 600){
+  if(MediaQuery.of(context).size.width < 400){
     return 2;
   }
-  if(MediaQuery.of(context).size.width < 1000){
+  if(MediaQuery.of(context).size.width < 700){
     return 3;
   }
-  return 4;
+  if(MediaQuery.of(context).size.width < 1050){
+    return 4;
+  }
+  return 5;
 }
 
 String formattedDate(bool is12h, String date){

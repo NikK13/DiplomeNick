@@ -42,8 +42,8 @@ class _FlightsFragmentState extends State<FlightsFragment> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, left: 4, right: 4),
-        child: FutureBuilder(
-          future: _flightsFuture,
+        child: StreamBuilder(
+          stream: appBloc.flightsStream,
           builder: (context, AsyncSnapshot<List<Flight>?> snapshot){
             if(snapshot.hasData){
               if(snapshot.data!.isNotEmpty){
@@ -51,12 +51,11 @@ class _FlightsFragmentState extends State<FlightsFragment> {
                   shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossAxisCountOnWidth(context),
-                    childAspectRatio: 1.9
                   ),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index){
                     return FlightItem(
-                      flight: snapshot.data![index],
+                      flight: snapshot.data![index]
                     );
                   },
                 );
