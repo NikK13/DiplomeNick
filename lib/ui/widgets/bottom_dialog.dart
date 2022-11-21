@@ -47,6 +47,7 @@ showInfoDialog(context, String text){
 showBottomSheetDialog(context, Widget child){
   showModalBottomSheet(
     context: context,
+    isScrollControlled: true,
     backgroundColor: dialogBackgroundColor(context),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
@@ -56,7 +57,7 @@ showBottomSheetDialog(context, Widget child){
     ),
     constraints: BoxConstraints(
       maxWidth: MediaQuery.of(context).size.width > 500 ? 500 :
-      MediaQuery.of(context).size.width
+      MediaQuery.of(context).size.width,
     ),
     builder: (ctx) => child
   );

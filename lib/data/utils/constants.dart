@@ -11,6 +11,8 @@ const int listLimit = 5;
 
 const numberTypeForInputs = TextInputType.numberWithOptions(decimal: true);
 
+const String currency = "BYN";
+
 const String androidPl = "android";
 const String iosPl = "iOS";
 

@@ -1,3 +1,5 @@
+import 'package:diplome_nick/data/model/flight.dart';
+import 'package:diplome_nick/data/model/ticket.dart';
 import 'package:diplome_nick/data/utils/constants.dart';
 import 'package:diplome_nick/data/utils/lists.dart';
 import 'package:diplome_nick/data/utils/localization.dart';
@@ -26,6 +28,12 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
   final _startDateController = TextEditingController();
   final _endDateController = TextEditingController();
 
+  final _economicPriceController = TextEditingController();
+  final _businessPriceController = TextEditingController();
+
+  final _economicCountController = TextEditingController();
+  final _businessCountController = TextEditingController();
+
   @override
   void initState() {
     _placeStart = destinations.first;
@@ -36,7 +44,7 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
   @override
   Widget build(BuildContext context) {
     return AppDialog(
-      title: AppLocalizations.of(context, 'flights'),
+      title: AppLocalizations.of(context, 'details'),
       child: Column(
         children: [
           const SizedBox(height: 16),
@@ -104,6 +112,62 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
             ],
           ),
           const SizedBox(height: 16),
+          Text(
+            "${AppLocalizations.of(context, 'tickets')}(${AppLocalizations.of(context, 'economic_class')})",
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: InputField(
+                  hint: AppLocalizations.of(context, 'price'),
+                  controller: _economicPriceController,
+                  inputType: TextInputType.number,
+                )
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: InputField(
+                  hint: AppLocalizations.of(context, 'count'),
+                  controller: _economicCountController,
+                  inputType: TextInputType.number,
+                )
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            "${AppLocalizations.of(context, 'tickets')}(${AppLocalizations.of(context, 'business_class')})",
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: InputField(
+                  hint: AppLocalizations.of(context, 'price'),
+                  controller: _businessPriceController,
+                  inputType: TextInputType.number,
+                )
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: InputField(
+                  hint: AppLocalizations.of(context, 'count'),
+                  controller: _businessCountController,
+                  inputType: TextInputType.number,
+                )
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: AppButton(
@@ -111,15 +175,28 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
               onPressed: () async{
                 final startDate = _startDateController.text.trim();
                 final endDate = _endDateController.text.trim();
-                if(startDate.isNotEmpty && endDate.isNotEmpty){
+                final economicPrice = _economicPriceController.text.trim();
+                final economicCount = _economicCountController.text.trim();
+                final businessPrice = _businessPriceController.text.trim();
+                final businessCount = _businessCountController.text.trim();
+                if(startDate.isNotEmpty && endDate.isNotEmpty &&
+                  economicCount.isNotEmpty && economicPrice.isNotEmpty &&
+                  businessCount.isNotEmpty && businessPrice.isNotEmpty){
                   if(DateFormat(dateFormat24h).parse(endDate).isAfter(DateFormat(dateFormat24h).parse(startDate))){
                     Navigator.pop(context);
-                    await appBloc.addNewFlight(
-                      _placeStart.title,
-                      _placeFinish.title,
-                      startDate,
-                      endDate
+                    final flight = Flight(
+                      startDate: startDate,
+                      endDate: endDate,
+                      titleStart: _placeStart.title,
+                      titleEnd: _placeFinish.title,
                     );
+                    final tickets = Ticket(
+                      economicTicketsCount: int.tryParse(economicCount) ?? 0,
+                      economicTicketsPrice: double.tryParse(economicPrice) ?? 0.0,
+                      businessTicketsCount: int.tryParse(businessCount) ?? 0,
+                      businessTicketsPrice: double.tryParse(businessPrice) ?? 0.0
+                    );
+                    await appBloc.addNewFlight(flight, tickets);
                     await widget.updateList!();
                   }
                   else{
@@ -141,6 +218,10 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
   void dispose() {
     _startDateController.dispose();
     _endDateController.dispose();
+    _businessCountController.dispose();
+    _businessPriceController.dispose();
+    _economicCountController.dispose();
+    _economicPriceController.dispose();
     super.dispose();
   }
 }

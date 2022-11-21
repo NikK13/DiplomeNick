@@ -13,9 +13,9 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i6;
 import 'package:diplome_nick/data/utils/guards.dart' as _i8;
-import 'package:diplome_nick/ui/fragments/flights.dart' as _i5;
+import 'package:diplome_nick/ui/fragments/flights.dart' as _i4;
 import 'package:diplome_nick/ui/fragments/settings.dart' as _i3;
-import 'package:diplome_nick/ui/fragments/tickets.dart' as _i4;
+import 'package:diplome_nick/ui/fragments/tickets.dart' as _i5;
 import 'package:diplome_nick/ui/pages/home.dart' as _i2;
 import 'package:diplome_nick/ui/pages/login.dart' as _i1;
 import 'package:flutter/material.dart' as _i7;
@@ -53,16 +53,16 @@ class AppRouter extends _i6.RootStackRouter {
         ),
       );
     },
-    TicketsFragmentRoute.name: (routeData) {
-      return _i6.AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: const _i4.TicketsFragment(),
-      );
-    },
     FlightsFragmentRoute.name: (routeData) {
       return _i6.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i5.FlightsFragment(),
+        child: const _i4.FlightsFragment(),
+      );
+    },
+    TicketsFragmentRoute.name: (routeData) {
+      return _i6.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const _i5.TicketsFragment(),
       );
     },
     SettingsFragmentRoute.name: (routeData) {
@@ -100,17 +100,17 @@ class AppRouter extends _i6.RootStackRouter {
               '#redirect',
               path: '',
               parent: HomePageRoute.name,
-              redirectTo: 'tickets',
+              redirectTo: 'flights',
               fullMatch: true,
-            ),
-            _i6.RouteConfig(
-              TicketsFragmentRoute.name,
-              path: 'tickets',
-              parent: HomePageRoute.name,
             ),
             _i6.RouteConfig(
               FlightsFragmentRoute.name,
               path: 'flights',
+              parent: HomePageRoute.name,
+            ),
+            _i6.RouteConfig(
+              TicketsFragmentRoute.name,
+              path: 'tickets',
               parent: HomePageRoute.name,
             ),
             _i6.RouteConfig(
@@ -193,19 +193,7 @@ class SettingsPageRouteArgs {
 }
 
 /// generated route for
-/// [_i4.TicketsFragment]
-class TicketsFragmentRoute extends _i6.PageRouteInfo<void> {
-  const TicketsFragmentRoute()
-      : super(
-          TicketsFragmentRoute.name,
-          path: 'tickets',
-        );
-
-  static const String name = 'TicketsFragmentRoute';
-}
-
-/// generated route for
-/// [_i5.FlightsFragment]
+/// [_i4.FlightsFragment]
 class FlightsFragmentRoute extends _i6.PageRouteInfo<void> {
   const FlightsFragmentRoute()
       : super(
@@ -214,6 +202,18 @@ class FlightsFragmentRoute extends _i6.PageRouteInfo<void> {
         );
 
   static const String name = 'FlightsFragmentRoute';
+}
+
+/// generated route for
+/// [_i5.TicketsFragment]
+class TicketsFragmentRoute extends _i6.PageRouteInfo<void> {
+  const TicketsFragmentRoute()
+      : super(
+          TicketsFragmentRoute.name,
+          path: 'tickets',
+        );
+
+  static const String name = 'TicketsFragmentRoute';
 }
 
 /// generated route for

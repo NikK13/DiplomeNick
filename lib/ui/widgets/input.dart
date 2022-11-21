@@ -18,7 +18,7 @@ class InputField extends StatefulWidget {
     this.controller,
     this.isEnabled = true,
     this.isPassword = false,
-    this.borderRadius = 16,
+    this.borderRadius = 50,
     this.onTap,
     this.inputType = TextInputType.text
   }) : super(key: key);
@@ -66,7 +66,7 @@ class _InputFieldState extends State<InputField> {
             borderSide: BorderSide(
               color: Theme.of(context).brightness == Brightness.light
               ? Colors.black : Colors.white,
-              width: 0.5
+              width: 1
             )
           ),
           enabledBorder: OutlineInputBorder(
@@ -74,7 +74,7 @@ class _InputFieldState extends State<InputField> {
             borderSide: BorderSide(
               color: Theme.of(context).brightness == Brightness.light
               ? Colors.black : Colors.white,
-              width: 0.5
+              width: 1
             )
           ),
           disabledBorder: OutlineInputBorder(
@@ -82,7 +82,7 @@ class _InputFieldState extends State<InputField> {
             borderSide: BorderSide(
               color: Theme.of(context).brightness == Brightness.light
               ? Colors.black : Colors.white,
-              width: 0.5
+              width: 1
             )
           ),
           focusedBorder: OutlineInputBorder(
@@ -90,7 +90,7 @@ class _InputFieldState extends State<InputField> {
             borderSide: BorderSide(
               color: Theme.of(context).brightness == Brightness.light
               ? Colors.black : Colors.white,
-              width: 0.5
+              width: 1
             )
           ),
           hintText: widget.hint ?? "",

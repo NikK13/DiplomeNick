@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class App {
-  static const String appName = "DiplomeNick";
+  static const String appName = "TickBook";
   static String platform = defaultTargetPlatform.name;
 
   static const appPadding = EdgeInsets.only(

@@ -23,11 +23,11 @@ class _TicketsFragmentState extends State<TicketsFragment> {
           builder: (context, AsyncSnapshot<List<Ticket>?> snapshot){
             if(snapshot.hasData){
               if(snapshot.data!.isNotEmpty){
-                return GridView.builder(
+                return ListView.builder(
                   shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  /*gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossAxisCountOnWidth(context),
-                  ),
+                  ),*/
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index){
                     return TicketItem(ticket: snapshot.data![index]);

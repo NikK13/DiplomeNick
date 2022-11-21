@@ -1,4 +1,5 @@
-import 'package:diplome_nick/data/utils/extensions.dart';
+import 'package:diplome_nick/data/utils/constants.dart';
+import 'package:diplome_nick/data/utils/localization.dart';
 import 'package:diplome_nick/data/utils/styles.dart';
 import 'package:diplome_nick/main.dart';
 import 'package:flutter/material.dart';
@@ -6,15 +7,28 @@ import 'package:flutter/material.dart';
 class Ticket{
   String? key;
   String? flightKey;
-  int? ticketsCount;
+  int? economicTicketsCount;
+  double? economicTicketsPrice;
+  int? businessTicketsCount;
+  double? businessTicketsPrice;
 
-  Ticket({this.key, this.flightKey, this.ticketsCount});
+  Ticket({
+    this.key,
+    this.flightKey,
+    this.economicTicketsCount,
+    this.economicTicketsPrice,
+    this.businessTicketsCount,
+    this.businessTicketsPrice
+  });
 
   factory Ticket.fromJson(String key, Map<String, dynamic> json){
     return Ticket(
       key: key,
       flightKey: json['flight_id'],
-      ticketsCount: json['tickets_count']
+      economicTicketsPrice: json['economic_price'],
+      economicTicketsCount: json['economic_count'],
+      businessTicketsPrice: json['business_price'],
+      businessTicketsCount: json['business_count'],
     );
   }
 }
@@ -37,51 +51,113 @@ class TicketItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.airplane_ticket_outlined,
-            color: appColor,
-            size: 16,
+          Row(
+            children: [
+              const Icon(
+                Icons.airplane_ticket_outlined,
+                color: appColor,
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "${appBloc.flightByTicketKey(ticket!.key!)!.titleStart!} - ${appBloc.flightByTicketKey(ticket!.key!)!.titleEnd!}",
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 4),
-          Expanded(
-            flex: 2,
-            child: Center(
-              child: Text(
-                "${appBloc.flightByKey(ticket!.key!)!.titleStart!} - ${appBloc.flightByKey(ticket!.key!)!.titleEnd!}",
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                "${AppLocalizations.of(context, 'economic_class')}:  ",
                 style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500
                 ),
                 textAlign: TextAlign.center,
               ),
-            ),
+              Expanded(
+                child: Row(
+                  children: [
+                    Text(
+                      ticket!.economicTicketsCount!.toString(),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      " ${AppLocalizations.of(context, 'tickets_left')}, ",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      "${ticket!.economicTicketsPrice} $currency",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 4),
-          Expanded(
-            flex: 3,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    ticket!.ticketsCount!.toString(),
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                "${AppLocalizations.of(context, 'business_class')}:  ",
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500
+                ),
+                textAlign: TextAlign.center,
+              ),
+              Expanded(
+                child: Row(
+                  children: [
+                    Text(
+                      ticket!.businessTicketsCount!.toString(),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    "tickets left",
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500
+                    Text(
+                      " ${AppLocalizations.of(context, 'tickets_left')}, ",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              )
-            ),
+                    Text(
+                      "${ticket!.businessTicketsPrice} $currency",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

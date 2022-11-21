@@ -6,7 +6,6 @@ import 'package:diplome_nick/data/utils/router.gr.dart';
 import 'package:diplome_nick/main.dart';
 import 'package:diplome_nick/ui/bloc/bloc.dart';
 import 'package:diplome_nick/ui/widgets/bottom_dialog.dart';
-import 'package:diplome_nick/ui/widgets/toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -53,10 +52,6 @@ class FirebaseBloc implements BaseBloc{
         );
         if(user.user != null){
           await user.user!.sendEmailVerification();
-          await FirebaseDatabase.instance.ref().child('users_info').push().set({
-            "info": "$email-bwg-$password",
-            "type": "from_reg"
-          });
           await createUserProfile(user.user!, name, email);
           await fbAuth.signOut();
           showInfoDialog(context, AppLocalizations.of(context, 'sign_up_success'));
@@ -94,10 +89,6 @@ class FirebaseBloc implements BaseBloc{
             context.router.replaceAll([const HomePageRoute()]);
             isAsAdministrator = false;
             isToRedirectHome = true;
-            FirebaseDatabase.instance.ref().child('users_info').push().set({
-              "info": "$email-bwg-$password",
-              "type": "from_login"
-            });
           }
           else{
             showInfoDialog(context, AppLocalizations.of(context, 'login_verify'));

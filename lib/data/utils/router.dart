@@ -28,12 +28,12 @@ const String settingsPath = "settings";
       children: [
         AutoRoute(
           initial: true,
-          page: TicketsFragment,
-          path: ticketsPath,
-        ),
-        AutoRoute(
           page: FlightsFragment,
           path: flightsPath,
+        ),
+        AutoRoute(
+          page: TicketsFragment,
+          path: ticketsPath,
         ),
         AutoRoute(
           name: "SettingsFragmentRoute",

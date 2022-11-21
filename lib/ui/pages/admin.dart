@@ -97,6 +97,20 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
                 ),
                 ListTile(
                   leading: Icon(
+                    Icons.flight,
+                    color: accent(context),
+                  ),
+                  title: Text(
+                      AppLocalizations.of(context, 'flights')
+                  ),
+                  onTap: () {
+                    setState(() => _currentIndex = 0);
+                    context.navigateTo(const FlightsFragmentRoute());
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
                     Icons.airplane_ticket_outlined,
                     color: accent(context),
                   ),
@@ -104,22 +118,8 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
                     AppLocalizations.of(context, 'tickets')
                   ),
                   onTap: () {
-                    setState(() => _currentIndex = 0);
-                    context.navigateTo(const TicketsFragmentRoute());
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.flight,
-                    color: accent(context),
-                  ),
-                  title: Text(
-                    AppLocalizations.of(context, 'flights')
-                  ),
-                  onTap: () {
                     setState(() => _currentIndex = 1);
-                    context.navigateTo(const FlightsFragmentRoute());
+                    context.navigateTo(const TicketsFragmentRoute());
                     Navigator.pop(context);
                   },
                 ),
@@ -144,8 +144,8 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
         body: SafeArea(
           child: AutoTabsScaffold(
             routes: [
-              const TicketsFragmentRoute(),
               const FlightsFragmentRoute(),
+              const TicketsFragmentRoute(),
               SettingsFragmentRoute()
             ],
           ),
@@ -157,9 +157,9 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
   String get appBarTitle{
     switch(_currentIndex){
       case 0:
-        return AppLocalizations.of(context, 'tickets');
-      case 1:
         return AppLocalizations.of(context, 'flights');
+      case 1:
+        return AppLocalizations.of(context, 'tickets');
       case 2:
         return AppLocalizations.of(context, 'settings');
       default:

@@ -18,7 +18,7 @@ class DropdownPicker extends StatelessWidget {
     this.onChange,
     this.onSubmit,
     this.darkColor = const Color(0xFF181818),
-    this.borderRadius = 10,
+    this.borderRadius = 50,
   }) : super(key: key);
 
   @override
@@ -41,7 +41,7 @@ class DropdownPicker extends StatelessWidget {
               borderSide: BorderSide(
                 color: Theme.of(context).brightness == Brightness.light
                 ? Colors.black : Colors.white,
-                width: 0.5
+                width: 1
               )
             ),
             disabledBorder: OutlineInputBorder(
@@ -49,7 +49,7 @@ class DropdownPicker extends StatelessWidget {
               borderSide: BorderSide(
                 color: Theme.of(context).brightness == Brightness.light
                 ? Colors.black : Colors.white,
-                width: 0.5
+                width: 1
               )
             ),
             enabledBorder: OutlineInputBorder(
@@ -57,7 +57,7 @@ class DropdownPicker extends StatelessWidget {
               borderSide: BorderSide(
                 color: Theme.of(context).brightness == Brightness.light
                 ? Colors.black : Colors.white,
-                width: 0.5
+                width: 1
               )
             ),
             contentPadding: const EdgeInsets.all(10),

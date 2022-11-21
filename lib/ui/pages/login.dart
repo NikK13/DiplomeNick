@@ -85,9 +85,10 @@ class _LoginPageState extends State<LoginPage> {
                                 const Text(
                                   App.appName,
                                   style: TextStyle(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 3.5
+                                    fontSize: 48,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 7.5,
+                                    color: appColor
                                   ),
                                 ),
                                 const SizedBox(height: 28),
@@ -121,31 +122,6 @@ class _LoginPageState extends State<LoginPage> {
                                     isPassword: true,
                                     hint: AppLocalizations.of(context, 'password'),
                                   ),
-                                ),
-                                const SizedBox(height: 12),
-                                if(!_isForSignUp)
-                                Column(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(right: 8),
-                                        child: GestureDetector(
-                                          onTap: (){
-
-                                          },
-                                          child: Text(
-                                            AppLocalizations.of(context, 'password_forgot'),
-                                            style: const TextStyle(
-                                              color: appColor,
-                                              fontWeight: FontWeight.w700
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    //const SizedBox(height: 16),
-                                  ],
                                 ),
                                 const SizedBox(height: 12),
                                 SizedBox(

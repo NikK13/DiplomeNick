@@ -115,6 +115,33 @@ Widget get dialogLine => Center(
   ),
 );
 
+Widget tableCell(String data, {bool isTitle = false}) =>
+    Padding(
+      padding: const EdgeInsets.all(16),
+      child: Center(
+        child: Text(
+          data,
+          style: TextStyle(
+            fontSize: isTitle ? 14 : 12,
+            fontWeight: isTitle ?
+            FontWeight.bold :
+            FontWeight.normal
+          ),
+          maxLines: 1,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+
+void showCustomDialog(context, Widget dialog){
+  showDialog(
+    context: context,
+    builder: (context){
+      return Dialog(child: dialog);
+    }
+  );
+}
+
 Widget get widgetLine => Center(
   child: Container(
     margin: const EdgeInsets.only(top: 2.0, bottom: 4.0),

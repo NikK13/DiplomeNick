@@ -45,9 +45,7 @@ class FlightItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async{
         if(!isAsAdministrator){
-          showBottomSheetDialog(context, FlightDetailsDialog(
-            flight: flight,
-          ));
+          showCustomDialog(context, FlightDetailsDialog(flight: flight));
         }
       },
       child: Container(
@@ -58,6 +56,7 @@ class FlightItem extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         padding: const EdgeInsets.all(15),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -85,81 +84,91 @@ class FlightItem extends StatelessWidget {
               color: appColor,
               size: 18,
             ),
-            const SizedBox(height: 4),
-            Expanded(
-              child: Center(
-                child: Text(
-                  "${flight!.titleStart!} - ${flight!.titleEnd!}",
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      Text(
+                        "${AppLocalizations.of(context, 'departure')}: ",
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        flight!.titleStart!,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        flight!.startDate!,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
-            ),
-            const SizedBox(height: 4),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Flexible(
+                Expanded(
+                  child: Center(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${AppLocalizations.of(context, 'departure')}: ",
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        Flexible(
-                          child: Text(
-                            flight!.startDate!,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700
+                      children: const [
+                        Icon(Icons.location_on_outlined, color: appColor),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              "---------------------------------------------------------------",
+                              overflow: TextOverflow.clip,
+                              maxLines: 1,
                             ),
-                            maxLines: 1,
-                            textAlign: TextAlign.center,
                           ),
-                        )
+                        ),
+                        Icon(Icons.location_on, color: appColor),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Flexible(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${AppLocalizations.of(context, 'arrival')}: ",
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700
-                          ),
-                          textAlign: TextAlign.center,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      Text(
+                        "${AppLocalizations.of(context, 'arrival')}: ",
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700
                         ),
-                        Flexible(
-                          child: Text(
-                            flight!.endDate!,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700
-                            ),
-                            maxLines: 1,
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      ],
-                    ),
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        flight!.titleEnd!,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        flight!.endDate!,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 4),
-                ],
-              ),
+                )
+              ],
             ),
           ],
         ),
