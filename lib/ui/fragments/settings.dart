@@ -23,7 +23,14 @@ class SettingsPage extends StatelessWidget {
           style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: appColor,
-        leading: const AutoLeadingButton(color: Colors.white)
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_outlined
+          ),
+          onPressed: (){
+            context.router.popForced();
+          },
+        )
       ) : null,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),

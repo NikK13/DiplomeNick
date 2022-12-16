@@ -3,13 +3,17 @@ import 'package:diplome_nick/data/utils/guards.dart';
 import 'package:diplome_nick/ui/fragments/flights.dart';
 import 'package:diplome_nick/ui/fragments/settings.dart';
 import 'package:diplome_nick/ui/fragments/tickets.dart';
+import 'package:diplome_nick/ui/fragments/users.dart';
+import 'package:diplome_nick/ui/pages/bookings.dart';
 import 'package:diplome_nick/ui/pages/home.dart';
 import 'package:diplome_nick/ui/pages/login.dart';
 
 const String loginPath = "/login";
+const String bookingsPath = "/bookings";
 const String settingsPagePath = "/settings";
 const String homePath = "";
 
+const String usersPath = "users";
 const String ticketsPath = "tickets";
 const String flightsPath = "flights";
 const String settingsPath = "settings";
@@ -36,6 +40,10 @@ const String settingsPath = "settings";
           path: ticketsPath,
         ),
         AutoRoute(
+          page: UsersFragment,
+          path: usersPath,
+        ),
+        AutoRoute(
           name: "SettingsFragmentRoute",
           page: SettingsPage,
           path: settingsPath,
@@ -47,6 +55,10 @@ const String settingsPath = "settings";
       name: "SettingsPageRoute",
       page: SettingsPage,
       path: settingsPagePath,
+    ),
+    AutoRoute(
+      page: MyBookingsPage,
+      path: bookingsPath,
     ),
     RedirectRoute(path: '*', redirectTo: "/")
   ],

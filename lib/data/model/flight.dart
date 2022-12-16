@@ -75,7 +75,13 @@ class FlightItem extends StatelessWidget {
                   color: Colors.white,
                 ), color: appColor,
                 onTap: () async{
-                  await appBloc.deleteFlight(flight!.key!, flight!.ticketsKey!);
+                  showActionsDialog(
+                    context,
+                    AppLocalizations.of(context, 'delete_data_title'),
+                    AppLocalizations.of(context, 'delete_data_content'),
+                    AppLocalizations.of(context, 'delete'),
+                    () async => await appBloc.deleteFlight(flight!.key!, flight!.ticketsKey!)
+                  );
                 },
                 context: context)
               ],
@@ -108,9 +114,17 @@ class FlightItem extends StatelessWidget {
                         textAlign: TextAlign.start,
                       ),
                       Text(
-                        flight!.startDate!,
+                        flight!.startDate!.substring(0, 10),
                         style: const TextStyle(
                           fontSize: 12,
+                          fontWeight: FontWeight.w700
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        flight!.startDate!.substring(10),
+                        style: const TextStyle(
+                          fontSize: 20,
                           fontWeight: FontWeight.w700
                         ),
                         textAlign: TextAlign.start,
@@ -118,12 +132,12 @@ class FlightItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                Expanded(
+                Flexible(
                   child: Center(
                     child: Row(
                       children: const [
                         Icon(Icons.location_on_outlined, color: appColor),
-                        Expanded(
+                        Flexible(
                           child: Center(
                             child: Text(
                               "---------------------------------------------------------------",
@@ -158,9 +172,17 @@ class FlightItem extends StatelessWidget {
                         textAlign: TextAlign.start,
                       ),
                       Text(
-                        flight!.endDate!,
+                        flight!.endDate!.substring(0, 10),
                         style: const TextStyle(
                           fontSize: 12,
+                          fontWeight: FontWeight.w700
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        flight!.endDate!.substring(10),
+                        style: const TextStyle(
+                          fontSize: 20,
                           fontWeight: FontWeight.w700
                         ),
                         textAlign: TextAlign.start,

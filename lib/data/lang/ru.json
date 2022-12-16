@@ -1,8 +1,10 @@
 {
   "account_create": "Нет аккаунта? Создайте",
   "account_exists": "Уже есть. Войти в аккаунт",
+  "add_flight": "Добавить рейс",
   "arrival": "Прибытие",
   "arrival_date": "Дата прибытия",
+  "banned_user": "Бан на пользователя",
   "book": "Забронировать",
   "bookings": "Мои брони",
   "booked_already": "Уже забронировано",
@@ -10,7 +12,10 @@
   "common": "Общие",
   "create": "Создать",
   "current_theme": "Тема приложения",
-  "departure": "Вылет",
+  "delete": "Удалить",
+  "delete_data_title": "Удалить эти данные",
+  "delete_data_content": "Вы действительно хотите удалить?",
+  "departure": "Отбытие",
   "departure_date": "Дата вылета",
   "details": "Детали",
   "desc": "Покупайте в один клик",
@@ -47,5 +52,6 @@
 
   "flights": "Рейсы",
   "tickets": "Билеты",
-  "settings": "Настройки"
+  "settings": "Настройки",
+  "users": "Пользователи"
 }

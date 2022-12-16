@@ -58,7 +58,7 @@ class _HomeUserPageState extends State<HomeUserPage> {
                   const Text(
                     App.appName,
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 30,
                       color: appColor,
                       fontWeight: FontWeight.w800,
                     ),
@@ -69,18 +69,28 @@ class _HomeUserPageState extends State<HomeUserPage> {
                       children: [
                         InkWell(
                           onTap: (){
-
+                            context.router.push(const MyBookingsPageRoute());
                           },
                           child: Text(
                             AppLocalizations.of(context, 'bookings'),
                             style: const TextStyle(
-                              fontSize: 14,
+                              fontSize: 13,
                               color: appColor,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 8),
+                        IconButton(
+                          onPressed: () async{
+                            context.router.push(SettingsPageRoute(isFullPage: true));
+                          },
+                          icon: const Icon(
+                            Icons.settings,
+                            color: appColor,
+                            size: 32,
+                          )
+                        ),
                         IconButton(
                           onPressed: () async{
                             await firebaseBloc.signOutUser();
@@ -109,49 +119,52 @@ class _HomeUserPageState extends State<HomeUserPage> {
               const SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: DropdownPicker(
-                        title: '${AppLocalizations.of(context, 'departure')}:*',
-                        myValue: _placeStart.value,
-                        items: destinations,
-                        darkColor: const Color(0xFF242424),
+                child: SizedBox(
+                  height: 72,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: DropdownPicker(
+                          title: '${AppLocalizations.of(context, 'departure')}:*',
+                          myValue: _placeStart.value,
+                          items: destinations,
+                          darkColor: const Color(0xFF242424),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: DropdownPicker(
-                        title: '${AppLocalizations.of(context, 'arrival')}:*',
-                        myValue: _placeFinish.value,
-                        items: destinations,
-                        darkColor: const Color(0xFF242424),
-                        onChange: (newVal){
-                          setState(() => _placeFinish = destinations.firstWhere((element) => element.value == newVal));
-                        },
-                        onSubmit: null,
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: DropdownPicker(
+                          title: '${AppLocalizations.of(context, 'arrival')}:*',
+                          myValue: _placeFinish.value,
+                          items: destinations,
+                          darkColor: const Color(0xFF242424),
+                          onChange: (newVal){
+                            setState(() => _placeFinish = destinations.firstWhere((element) => element.value == newVal));
+                          },
+                          onSubmit: null,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: InputField(
-                        hint: AppLocalizations.of(context, 'departure_date'),
-                        controller: _dateController,
-                        inputType: TextInputType.number,
-                        onTap: (){
-                          DatePicker.showDatePicker(
-                            context,
-                            locale: LocaleType.ru,
-                            minTime: DateTime(2023, 2, 1),
-                            onConfirm: (DateTime date){
-                              _dateController.text = DateFormat(dateFormat).format(date).toString();
-                            }
-                          );
-                        },
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: InputField(
+                          hint: AppLocalizations.of(context, 'departure_date'),
+                          controller: _dateController,
+                          inputType: TextInputType.number,
+                          onTap: (){
+                            DatePicker.showDatePicker(
+                              context,
+                              locale: LocaleType.ru,
+                              minTime: DateTime(2023, 2, 1),
+                              onConfirm: (DateTime date){
+                                _dateController.text = DateFormat(dateFormat).format(date).toString();
+                              }
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 24),

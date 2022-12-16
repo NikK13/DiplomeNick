@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:diplome_nick/data/utils/constants.dart';
+import 'package:diplome_nick/data/utils/localization.dart';
 import 'package:diplome_nick/data/utils/styles.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
@@ -114,6 +115,53 @@ Widget get dialogLine => Center(
     ),
   ),
 );
+
+void showActionsDialog(context, title, content, posTitle, posAction){
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) => AlertDialog(
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          fontFamily: appFont
+        ),
+      ),
+      content:  Text(
+        content,
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400
+        ),
+      ),
+      actions: [
+        TextButton(
+          child: Text(
+            AppLocalizations.of(context, 'cancel'),
+            style: const TextStyle(
+              color: appColor
+            ),
+          ),
+          onPressed: () => Navigator.pop(context)
+        ),
+        TextButton(
+          child: Text(
+            posTitle,
+            style: const TextStyle(
+              color: appColor
+            ),
+          ),
+          onPressed: () async{
+            Navigator.pop(context);
+            await posAction!();
+          },
+        ),
+      ],
+    )
+  );
+}
 
 Widget tableCell(String data, {bool isTitle = false}) =>
     Padding(

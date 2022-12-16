@@ -1,8 +1,10 @@
 {
   "account_create": "No account? Create one",
   "account_exists": "Already have. Log in",
+  "add_flight": "Add flight",
   "arrival": "Arrival",
   "arrival_date": "Arrival date",
+  "banned_user": "Ban on user",
   "book": "Book",
   "bookings": "My bookings",
   "booked_already": "Already booked",
@@ -10,6 +12,9 @@
   "common": "Common",
   "create": "Create",
   "current_theme": "Theme mode",
+  "delete": "Delete",
+  "delete_data_title": "Delete all data",
+  "delete_data_content": "Are you sure want to delete all data?",
   "departure": "Departure",
   "departure_date": "Departure date",
   "details": "Details",
@@ -47,5 +52,6 @@
 
   "flights": "Flights",
   "tickets": "Tickets",
-  "settings": "Settings"
+  "settings": "Settings",
+  "users": "Users"
 }

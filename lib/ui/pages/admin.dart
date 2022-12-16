@@ -36,7 +36,7 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            appBarTitle,
+            "${App.appName} $appBarTitle",
             style: const TextStyle(color: Colors.white),
           ),
           backgroundColor: appColor,
@@ -125,6 +125,20 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
                 ),
                 ListTile(
                   leading: Icon(
+                    Icons.supervised_user_circle_outlined,
+                    color: accent(context),
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context, 'users')
+                  ),
+                  onTap: () {
+                    setState(() => _currentIndex = 2);
+                    context.navigateTo(const UsersFragmentRoute());
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
                     CupertinoIcons.settings,
                     color: accent(context),
                   ),
@@ -132,7 +146,7 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
                     AppLocalizations.of(context, 'settings')
                   ),
                   onTap: () {
-                    setState(() => _currentIndex = 2);
+                    setState(() => _currentIndex = 3);
                     context.navigateTo(SettingsFragmentRoute());
                     Navigator.pop(context);
                   },
@@ -146,6 +160,7 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
             routes: [
               const FlightsFragmentRoute(),
               const TicketsFragmentRoute(),
+              const UsersFragmentRoute(),
               SettingsFragmentRoute()
             ],
           ),
@@ -161,6 +176,8 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
       case 1:
         return AppLocalizations.of(context, 'tickets');
       case 2:
+        return AppLocalizations.of(context, 'users');
+      case 3:
         return AppLocalizations.of(context, 'settings');
       default:
         return App.appName;

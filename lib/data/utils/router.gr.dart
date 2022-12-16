@@ -11,33 +11,35 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i6;
-import 'package:diplome_nick/data/utils/guards.dart' as _i8;
-import 'package:diplome_nick/ui/fragments/flights.dart' as _i4;
+import 'package:auto_route/auto_route.dart' as _i8;
+import 'package:diplome_nick/data/utils/guards.dart' as _i10;
+import 'package:diplome_nick/ui/fragments/flights.dart' as _i5;
 import 'package:diplome_nick/ui/fragments/settings.dart' as _i3;
-import 'package:diplome_nick/ui/fragments/tickets.dart' as _i5;
+import 'package:diplome_nick/ui/fragments/tickets.dart' as _i6;
+import 'package:diplome_nick/ui/fragments/users.dart' as _i7;
+import 'package:diplome_nick/ui/pages/bookings.dart' as _i4;
 import 'package:diplome_nick/ui/pages/home.dart' as _i2;
 import 'package:diplome_nick/ui/pages/login.dart' as _i1;
-import 'package:flutter/material.dart' as _i7;
+import 'package:flutter/material.dart' as _i9;
 
-class AppRouter extends _i6.RootStackRouter {
+class AppRouter extends _i8.RootStackRouter {
   AppRouter({
-    _i7.GlobalKey<_i7.NavigatorState>? navigatorKey,
+    _i9.GlobalKey<_i9.NavigatorState>? navigatorKey,
     required this.checkIfUserLoggedIn,
   }) : super(navigatorKey);
 
-  final _i8.CheckIfUserLoggedIn checkIfUserLoggedIn;
+  final _i10.CheckIfUserLoggedIn checkIfUserLoggedIn;
 
   @override
-  final Map<String, _i6.PageFactory> pagesMap = {
+  final Map<String, _i8.PageFactory> pagesMap = {
     LoginPageRoute.name: (routeData) {
-      return _i6.AdaptivePage<dynamic>(
+      return _i8.AdaptivePage<dynamic>(
         routeData: routeData,
         child: const _i1.LoginPage(),
       );
     },
     HomePageRoute.name: (routeData) {
-      return _i6.AdaptivePage<dynamic>(
+      return _i8.AdaptivePage<dynamic>(
         routeData: routeData,
         child: const _i2.HomePage(),
       );
@@ -45,7 +47,7 @@ class AppRouter extends _i6.RootStackRouter {
     SettingsPageRoute.name: (routeData) {
       final args = routeData.argsAs<SettingsPageRouteArgs>(
           orElse: () => const SettingsPageRouteArgs());
-      return _i6.AdaptivePage<dynamic>(
+      return _i8.AdaptivePage<dynamic>(
         routeData: routeData,
         child: _i3.SettingsPage(
           key: args.key,
@@ -53,22 +55,34 @@ class AppRouter extends _i6.RootStackRouter {
         ),
       );
     },
-    FlightsFragmentRoute.name: (routeData) {
-      return _i6.AdaptivePage<dynamic>(
+    MyBookingsPageRoute.name: (routeData) {
+      return _i8.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i4.FlightsFragment(),
+        child: const _i4.MyBookingsPage(),
+      );
+    },
+    FlightsFragmentRoute.name: (routeData) {
+      return _i8.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const _i5.FlightsFragment(),
       );
     },
     TicketsFragmentRoute.name: (routeData) {
-      return _i6.AdaptivePage<dynamic>(
+      return _i8.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i5.TicketsFragment(),
+        child: const _i6.TicketsFragment(),
+      );
+    },
+    UsersFragmentRoute.name: (routeData) {
+      return _i8.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const _i7.UsersFragment(),
       );
     },
     SettingsFragmentRoute.name: (routeData) {
       final args = routeData.argsAs<SettingsFragmentRouteArgs>(
           orElse: () => const SettingsFragmentRouteArgs());
-      return _i6.AdaptivePage<dynamic>(
+      return _i8.AdaptivePage<dynamic>(
         routeData: routeData,
         child: _i3.SettingsPage(
           key: args.key,
@@ -79,52 +93,61 @@ class AppRouter extends _i6.RootStackRouter {
   };
 
   @override
-  List<_i6.RouteConfig> get routes => [
-        _i6.RouteConfig(
+  List<_i8.RouteConfig> get routes => [
+        _i8.RouteConfig(
           '/#redirect',
           path: '/',
           redirectTo: '/login',
           fullMatch: true,
         ),
-        _i6.RouteConfig(
+        _i8.RouteConfig(
           LoginPageRoute.name,
           path: '/login',
           guards: [checkIfUserLoggedIn],
         ),
-        _i6.RouteConfig(
+        _i8.RouteConfig(
           HomePageRoute.name,
           path: '',
           guards: [checkIfUserLoggedIn],
           children: [
-            _i6.RouteConfig(
+            _i8.RouteConfig(
               '#redirect',
               path: '',
               parent: HomePageRoute.name,
               redirectTo: 'flights',
               fullMatch: true,
             ),
-            _i6.RouteConfig(
+            _i8.RouteConfig(
               FlightsFragmentRoute.name,
               path: 'flights',
               parent: HomePageRoute.name,
             ),
-            _i6.RouteConfig(
+            _i8.RouteConfig(
               TicketsFragmentRoute.name,
               path: 'tickets',
               parent: HomePageRoute.name,
             ),
-            _i6.RouteConfig(
+            _i8.RouteConfig(
+              UsersFragmentRoute.name,
+              path: 'users',
+              parent: HomePageRoute.name,
+            ),
+            _i8.RouteConfig(
               SettingsFragmentRoute.name,
               path: 'settings',
               parent: HomePageRoute.name,
             ),
           ],
         ),
-        _i6.RouteConfig(
+        _i8.RouteConfig(
           SettingsPageRoute.name,
           path: '/settings',
         ),
-        _i6.RouteConfig(
+        _i8.RouteConfig(
+          MyBookingsPageRoute.name,
+          path: '/bookings',
+        ),
+        _i8.RouteConfig(
           '*#redirect',
           path: '*',
           redirectTo: '/',
@@ -135,7 +158,7 @@ class AppRouter extends _i6.RootStackRouter {
 
 /// generated route for
 /// [_i1.LoginPage]
-class LoginPageRoute extends _i6.PageRouteInfo<void> {
+class LoginPageRoute extends _i8.PageRouteInfo<void> {
   const LoginPageRoute()
       : super(
           LoginPageRoute.name,
@@ -147,8 +170,8 @@ class LoginPageRoute extends _i6.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.HomePage]
-class HomePageRoute extends _i6.PageRouteInfo<void> {
-  const HomePageRoute({List<_i6.PageRouteInfo>? children})
+class HomePageRoute extends _i8.PageRouteInfo<void> {
+  const HomePageRoute({List<_i8.PageRouteInfo>? children})
       : super(
           HomePageRoute.name,
           path: '',
@@ -160,9 +183,9 @@ class HomePageRoute extends _i6.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.SettingsPage]
-class SettingsPageRoute extends _i6.PageRouteInfo<SettingsPageRouteArgs> {
+class SettingsPageRoute extends _i8.PageRouteInfo<SettingsPageRouteArgs> {
   SettingsPageRoute({
-    _i7.Key? key,
+    _i9.Key? key,
     bool isFullPage = false,
   }) : super(
           SettingsPageRoute.name,
@@ -182,7 +205,7 @@ class SettingsPageRouteArgs {
     this.isFullPage = false,
   });
 
-  final _i7.Key? key;
+  final _i9.Key? key;
 
   final bool isFullPage;
 
@@ -193,8 +216,20 @@ class SettingsPageRouteArgs {
 }
 
 /// generated route for
-/// [_i4.FlightsFragment]
-class FlightsFragmentRoute extends _i6.PageRouteInfo<void> {
+/// [_i4.MyBookingsPage]
+class MyBookingsPageRoute extends _i8.PageRouteInfo<void> {
+  const MyBookingsPageRoute()
+      : super(
+          MyBookingsPageRoute.name,
+          path: '/bookings',
+        );
+
+  static const String name = 'MyBookingsPageRoute';
+}
+
+/// generated route for
+/// [_i5.FlightsFragment]
+class FlightsFragmentRoute extends _i8.PageRouteInfo<void> {
   const FlightsFragmentRoute()
       : super(
           FlightsFragmentRoute.name,
@@ -205,8 +240,8 @@ class FlightsFragmentRoute extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i5.TicketsFragment]
-class TicketsFragmentRoute extends _i6.PageRouteInfo<void> {
+/// [_i6.TicketsFragment]
+class TicketsFragmentRoute extends _i8.PageRouteInfo<void> {
   const TicketsFragmentRoute()
       : super(
           TicketsFragmentRoute.name,
@@ -217,11 +252,23 @@ class TicketsFragmentRoute extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i7.UsersFragment]
+class UsersFragmentRoute extends _i8.PageRouteInfo<void> {
+  const UsersFragmentRoute()
+      : super(
+          UsersFragmentRoute.name,
+          path: 'users',
+        );
+
+  static const String name = 'UsersFragmentRoute';
+}
+
+/// generated route for
 /// [_i3.SettingsPage]
 class SettingsFragmentRoute
-    extends _i6.PageRouteInfo<SettingsFragmentRouteArgs> {
+    extends _i8.PageRouteInfo<SettingsFragmentRouteArgs> {
   SettingsFragmentRoute({
-    _i7.Key? key,
+    _i9.Key? key,
     bool isFullPage = false,
   }) : super(
           SettingsFragmentRoute.name,
@@ -241,7 +288,7 @@ class SettingsFragmentRouteArgs {
     this.isFullPage = false,
   });
 
-  final _i7.Key? key;
+  final _i9.Key? key;
 
   final bool isFullPage;
 

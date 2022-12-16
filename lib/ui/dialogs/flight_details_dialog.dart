@@ -121,7 +121,8 @@ class _FlightDetailsDialogState extends State<FlightDetailsDialog> {
             child: Table(
               border: TableBorder.all(
                 borderRadius: BorderRadius.circular(8),
-                color: Colors.grey.shade800,
+                color: Theme.of(context).brightness == Brightness.light ?
+                Colors.grey.shade800 : Colors.white,
                 width: 1.5
               ),
               columnWidths: const {
@@ -158,30 +159,26 @@ class _FlightDetailsDialogState extends State<FlightDetailsDialog> {
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: RadioListTile(
-                    value: 1,
-                    title: Text(AppLocalizations.of(context, 'economic_class')),
-                    groupValue: selectedRadio,
-                    activeColor: appColor,
-                    onChanged: (val) {
-                      setSelectedRadio(val!);
-                    },
-                  ),
+                RadioListTile(
+                  value: 1,
+                  title: Text(AppLocalizations.of(context, 'economic_class')),
+                  groupValue: selectedRadio,
+                  activeColor: appColor,
+                  onChanged: (val) {
+                    setSelectedRadio(val!);
+                  },
                 ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: RadioListTile(
-                    value: 2,
-                    title: Text(AppLocalizations.of(context, 'business_class')),
-                    groupValue: selectedRadio,
-                    activeColor: appColor,
-                    onChanged: (val) {
-                      setSelectedRadio(val!);
-                    },
-                  ),
+                const SizedBox(height: 6),
+                RadioListTile(
+                  value: 2,
+                  title: Text(AppLocalizations.of(context, 'business_class')),
+                  groupValue: selectedRadio,
+                  activeColor: appColor,
+                  onChanged: (val) {
+                    setSelectedRadio(val!);
+                  },
                 ),
               ],
             ),

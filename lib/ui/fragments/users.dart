@@ -1,24 +1,24 @@
-import 'package:diplome_nick/data/model/ticket.dart';
+import 'package:diplome_nick/data/model/user.dart';
 import 'package:diplome_nick/main.dart';
 import 'package:diplome_nick/ui/widgets/loading.dart';
 import 'package:flutter/material.dart';
 
-class TicketsFragment extends StatefulWidget {
-  const TicketsFragment({Key? key}) : super(key: key);
+class UsersFragment extends StatefulWidget {
+  const UsersFragment({Key? key}) : super(key: key);
 
   @override
-  State<TicketsFragment> createState() => _TicketsFragmentState();
+  State<UsersFragment> createState() => _UsersFragmentState();
 }
 
-class _TicketsFragmentState extends State<TicketsFragment> {
+class _UsersFragmentState extends State<UsersFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 8),
         child: StreamBuilder(
-          stream: appBloc.ticketsStream,
-          builder: (context, AsyncSnapshot<List<Ticket>?> snapshot){
+          stream: appBloc.usersStream,
+          builder: (context, AsyncSnapshot<List<User>?> snapshot){
             if(snapshot.hasData){
               if(snapshot.data!.isNotEmpty){
                 return ListView.builder(
@@ -28,7 +28,7 @@ class _TicketsFragmentState extends State<TicketsFragment> {
                   ),*/
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index){
-                    return TicketItem(ticket: snapshot.data![index]);
+                    return UserItem(user: snapshot.data![index]);
                   },
                 );
               }

@@ -1,5 +1,6 @@
 import 'package:diplome_nick/data/model/flight.dart';
 import 'package:diplome_nick/data/utils/extensions.dart';
+import 'package:diplome_nick/data/utils/localization.dart';
 import 'package:diplome_nick/data/utils/styles.dart';
 import 'package:diplome_nick/main.dart';
 import 'package:diplome_nick/ui/dialogs/new_flight_dialog.dart';
@@ -26,12 +27,16 @@ class _FlightsFragmentState extends State<FlightsFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         backgroundColor: appColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(60)
+          borderRadius: BorderRadius.circular(20)
         ),
-        child: const Icon(Icons.add, color: Colors.white),
+        label: Text(
+          AppLocalizations.of(context, 'add_flight'),
+          style: const TextStyle(color: Colors.white),
+        ),
+        icon: const Icon(Icons.add, color: Colors.white),
         onPressed: () async{
           showBottomSheetDialog(context, NewFlightDialog(
             updateList: () => setState(() {

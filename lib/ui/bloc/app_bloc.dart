@@ -1,6 +1,7 @@
 import 'package:diplome_nick/data/model/book.dart';
 import 'package:diplome_nick/data/model/flight.dart';
 import 'package:diplome_nick/data/model/ticket.dart';
+import 'package:diplome_nick/data/model/user.dart';
 import 'package:diplome_nick/data/utils/constants.dart';
 import 'package:diplome_nick/main.dart';
 import 'package:diplome_nick/ui/bloc/bloc.dart';
@@ -11,17 +12,21 @@ import 'package:rxdart/rxdart.dart';
 class AppBloc extends BaseBloc{
   final List<Flight> currentFlights = [];
   final List<Ticket> currentTickets = [];
+  final List<User> currentUsers = [];
 
   final _flights = BehaviorSubject<List<Flight>?>();
   final _tickets = BehaviorSubject<List<Ticket>?>();
+  final _users = BehaviorSubject<List<User>?>();
 
   final _bookings = BehaviorSubject<List<Booking>?>();
 
+  Stream<List<User>?> get usersStream => _users.stream;
   Stream<List<Flight>?> get flightsStream => _flights.stream;
   Stream<List<Ticket>?> get ticketsStream => _tickets.stream;
   Stream<List<Booking>?> get bookingsStream => _bookings.stream;
 
   Function(List<Flight>?) get loadAllFlights => _flights.sink.add;
+  Function(List<User>?) get loadAllUsers => _users.sink.add;
   Function(List<Ticket>?) get loadAllTickets => _tickets.sink.add;
   Function(List<Booking>?) get loadAllBookings => _bookings.sink.add;
 
@@ -32,10 +37,15 @@ class AppBloc extends BaseBloc{
     if(currentTickets.isNotEmpty){
       currentTickets.clear();
     }
+    if(currentUsers.isNotEmpty){
+      currentUsers.clear();
+    }
+    currentUsers.addAll((await loadUsers())!.toList());
     currentFlights.addAll((await loadFlights())!.toList());
     currentTickets.addAll((await loadTickets())!.toList());
     await loadAllFlights(currentFlights);
     await loadAllTickets(currentTickets);
+    await loadAllUsers(currentUsers);
     if(firebaseBloc.fbUser != null){
       await loadAllBookings((await loadMyOrders(firebaseBloc.fbUser!.uid))!.toList());
     }
@@ -73,6 +83,22 @@ class AppBloc extends BaseBloc{
         bookings.add(book);
       }
       return bookings;
+    }
+    else{
+      return [];
+    }
+  }
+
+  Future<List<User>?> loadUsers() async{
+    final query = await FirebaseDatabase.instance.ref("users").once();
+    if(query.snapshot.exists){
+      final List<User> users = [];
+      final data = query.snapshot.children;
+      for(var item in data){
+        final book = User.fromJson(item.key!, item.value as Map<String, dynamic>);
+        users.add(book);
+      }
+      return users;
     }
     else{
       return [];
@@ -132,6 +158,11 @@ class AppBloc extends BaseBloc{
       "business_count": ticket.businessTicketsCount,
     });
     return ref.key!;
+  }
+
+  Future<void> updateUser(String key, Map<String, Object?> item) async{
+    final ref = FirebaseDatabase.instance.ref("users/$key");
+    await ref.update(item);
   }
 
   Future<void> deleteFlight(String key, String ticketsKey) async{
