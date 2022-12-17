@@ -2,12 +2,14 @@ import 'package:diplome_nick/data/utils/extensions.dart';
 import 'package:diplome_nick/data/utils/styles.dart';
 import 'package:diplome_nick/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class InputField extends StatefulWidget {
   final String? hint;
   final Function? onTap;
   final bool isEnabled;
   final bool isPassword;
+  final bool isOnlyNum;
   final double borderRadius;
   final TextInputType? inputType;
   final TextEditingController? controller;
@@ -18,6 +20,7 @@ class InputField extends StatefulWidget {
     this.controller,
     this.isEnabled = true,
     this.isPassword = false,
+    this.isOnlyNum = false,
     this.borderRadius = 50,
     this.onTap,
     this.inputType = TextInputType.text
@@ -44,6 +47,9 @@ class _InputFieldState extends State<InputField> {
         !_passwordIsVisible : false,
         enableSuggestions: !widget.isPassword,
         autocorrect: !widget.isPassword,
+        inputFormatters: widget.isOnlyNum ? <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))
+        ] : null, // Only nu
         decoration: InputDecoration(
           hintStyle: const TextStyle(
             fontSize: 16

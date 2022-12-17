@@ -46,9 +46,10 @@ class AppBloc extends BaseBloc{
     await loadAllFlights(currentFlights);
     await loadAllTickets(currentTickets);
     await loadAllUsers(currentUsers);
-    if(firebaseBloc.fbUser != null){
-      await loadAllBookings((await loadMyOrders(firebaseBloc.fbUser!.uid))!.toList());
-    }
+  }
+
+  callBookingsStreams() async{
+    await loadAllBookings((await loadMyOrders(firebaseBloc.fbAuth.currentUser!.uid))!.toList());
   }
 
   Flight? flightByTicketKey(String key) => currentFlights.
@@ -74,13 +75,17 @@ class AppBloc extends BaseBloc{
   }
 
   Future<List<Booking>?> loadMyOrders(String userId) async{
-    final query = await FirebaseDatabase.instance.ref("users/$userId/bookings").once();
+    final query = await FirebaseDatabase.instance.ref("bookings").once();
     if(query.snapshot.exists){
       final List<Booking> bookings = [];
       final data = query.snapshot.children;
-      for(var item in data){
-        final book = Booking.fromJson(item.key!, item.value as Map<String, dynamic>);
-        bookings.add(book);
+      for (var element in data) {
+        for(var el in element.children){
+          if((el.value as Map<String, dynamic>)['booked_by'] == userId){
+            final book = Booking.fromJson(el.key!, el.value as Map<String, dynamic>);
+            bookings.add(book);
+          }
+        }
       }
       return bookings;
     }
@@ -168,23 +173,33 @@ class AppBloc extends BaseBloc{
   Future<void> deleteFlight(String key, String ticketsKey) async{
     await FirebaseDatabase.instance.ref("flights/$key").remove();
     await FirebaseDatabase.instance.ref("tickets/$ticketsKey").remove();
+    await FirebaseDatabase.instance.ref("bookings/$key").remove();
     await callStreams();
+  }
+
+  Future<void> cancelBook(Booking booking) async{
+    await FirebaseDatabase.instance.ref("bookings/${booking.flightKey}/${booking.key}").remove();
+    final ticketsRef = FirebaseDatabase.instance.ref("tickets/${booking.ticketsKey}");
+    final fieldToUpd = booking.ticketType! == "business" ? 'business_count' : 'economic_count';
+    final count = ((await ticketsRef.get()).value as Map)[fieldToUpd];
+    ticketsRef.update({fieldToUpd: count + 1});
   }
 
   Future<void> bookTicket(String flightKey, String ticketsKey, bool isBusiness) async{
     final ref = FirebaseDatabase.instance.ref("bookings/$flightKey").push();
     await ref.set({
       "flight_id": flightKey,
+      "tickets_id": ticketsKey,
       "booked_by": firebaseBloc.fbUser!.uid,
       "ticket_type": isBusiness ? "business" : "economic",
       "book_date": DateFormat(dateFormat24h).format(DateTime.now())
     });
-    final userRef = FirebaseDatabase.instance.ref("users/${firebaseBloc.fbUser!.uid}/bookings").push();
+    /*final userRef = FirebaseDatabase.instance.ref("users/${firebaseBloc.fbUser!.uid}/bookings").push();
     await userRef.set({
       "flight_id": flightKey,
       "ticket_type": isBusiness ? "business" : "economic",
       "book_date": DateFormat(dateFormat24h).format(DateTime.now())
-    });
+    });*/
     final ticketsRef = FirebaseDatabase.instance.ref("tickets/$ticketsKey");
     final fieldToUpd = isBusiness ? 'business_count' : 'economic_count';
     final count = ((await ticketsRef.get()).value as Map)[fieldToUpd];
@@ -193,9 +208,10 @@ class AppBloc extends BaseBloc{
   }
 
   Future<bool> alreadyBooked(String flightKey) async{
-    final bookingsRef = await FirebaseDatabase.instance.ref("users/${firebaseBloc.fbUser!.uid}/bookings").once();
+    final bookingsRef = await FirebaseDatabase.instance.ref("bookings/$flightKey").once();
     for (var element in bookingsRef.snapshot.children) {
-      if((element.value as Map)['flight_id'] == flightKey){
+      final el = (element.value as Map);
+      if(el['flight_id'] == flightKey && el['booked_by'] == firebaseBloc.fbAuth.currentUser!.uid){
         return true;
       }
     }

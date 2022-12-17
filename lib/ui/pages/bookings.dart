@@ -12,6 +12,13 @@ class MyBookingsPage extends StatefulWidget {
 }
 
 class _MyBookingsPageState extends State<MyBookingsPage> {
+
+  @override
+  void initState() {
+    appBloc.callBookingsStreams();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +32,7 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
               Text(
                 AppLocalizations.of(context, 'bookings'),
                 style: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold
                 ),
               ),
@@ -41,12 +48,12 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index){
                             return BookedItem(
-                               booking: snapshot.data![index],
+                              booking: snapshot.data![index],
                             );
                           },
                         );
                       }
-                      return const Center(child: Text("EMPTY LIST"));
+                      return Center(child: Text(AppLocalizations.of(context, 'empty_request')));
                     }
                     return const LoadingView();
                   },

@@ -31,6 +31,8 @@ class _FlightDetailsDialogState extends State<FlightDetailsDialog> {
     });
   }
 
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -198,24 +200,41 @@ class _FlightDetailsDialogState extends State<FlightDetailsDialog> {
                     ),
                   );
                 }
-                return AppButton(
-                  text: AppLocalizations.of(context, 'book'),
-                  onPressed: () async{
-                    if(selectedRadio != null){
-                      Navigator.pop(context);
-                      await appBloc.bookTicket(
-                        flight.key!,
-                        flight.ticketsKey!,
-                        selectedRadio == 2
-                      );
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: !_isLoading ? AppButton(
+                    text: AppLocalizations.of(context, 'book'),
+                    onPressed: () async{
+                      if(selectedRadio != null){
+                        //Navigator.pop(context);
+                        setState(() => _isLoading = true);
+                        await appBloc.bookTicket(
+                          flight.key!,
+                          flight.ticketsKey!,
+                          selectedRadio == 2
+                        );
+                        setState(() => _isLoading = false);
+                      }
                     }
-                  }
+                  ) : const LoadingView(),
                 );
               }
               return const LoadingView();
             }
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 14),
+          TextButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            child: Text(
+              AppLocalizations.of(context, 'close'),
+              style: const TextStyle(
+                color: appColor,
+              ),
+            )
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:diplome_nick/data/utils/localization.dart';
+import 'package:diplome_nick/data/utils/styles.dart';
 import 'package:diplome_nick/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -92,6 +93,7 @@ class _UserItemState extends State<UserItem> {
                 ),
                 CupertinoSwitch(
                   value: isBanned,
+                  activeColor: appColor,
                   onChanged: (val){
                     setState(() => isBanned = !isBanned);
                     appBloc.updateUser(widget.user!.key!, {

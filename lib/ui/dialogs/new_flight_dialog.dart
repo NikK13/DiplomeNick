@@ -56,6 +56,13 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
                   myValue: _placeStart.value,
                   items: destinations,
                   darkColor: const Color(0xFF242424),
+                  onChange: (newVal){
+                    final place = destinations.firstWhere((element) => element.value == newVal);
+                    if(place.value != _placeFinish.value){
+                      setState(() => _placeStart = place);
+                    }
+                  },
+                  onSubmit: null,
                 ),
               ),
               const SizedBox(width: 8),
@@ -66,7 +73,10 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
                   items: destinations,
                   darkColor: const Color(0xFF242424),
                   onChange: (newVal){
-                    setState(() => _placeFinish = destinations.firstWhere((element) => element.value == newVal));
+                    final place = destinations.firstWhere((element) => element.value == newVal);
+                    if(place.value != _placeStart.value){
+                      setState(() => _placeFinish = place);
+                    }
                   },
                   onSubmit: null,
                 ),
@@ -127,6 +137,7 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
                   hint: AppLocalizations.of(context, 'price'),
                   controller: _economicPriceController,
                   inputType: TextInputType.number,
+                  isOnlyNum: true,
                 )
               ),
               const SizedBox(width: 8),
@@ -135,6 +146,7 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
                   hint: AppLocalizations.of(context, 'count'),
                   controller: _economicCountController,
                   inputType: TextInputType.number,
+                  isOnlyNum: true,
                 )
               ),
             ],
@@ -155,6 +167,7 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
                   hint: AppLocalizations.of(context, 'price'),
                   controller: _businessPriceController,
                   inputType: TextInputType.number,
+                  isOnlyNum: true,
                 )
               ),
               const SizedBox(width: 8),
@@ -163,6 +176,7 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
                   hint: AppLocalizations.of(context, 'count'),
                   controller: _businessCountController,
                   inputType: TextInputType.number,
+                  isOnlyNum: true,
                 )
               ),
             ],

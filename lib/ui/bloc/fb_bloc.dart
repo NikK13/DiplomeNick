@@ -108,6 +108,11 @@ class FirebaseBloc implements BaseBloc{
     });
   }
 
+  Future<bool> userIsEnabled(User user) async{
+    final db = await FirebaseDatabase.instance.ref().child('users/${user.uid}').once();
+    return ((db.snapshot.value as Map)['is_enabled']) as bool;
+  }
+
   createUserProfile(user, name, email) async {
     final db = FirebaseDatabase.instance.ref().child('users/${user.uid}');
     await db.once().then((child) {
@@ -116,7 +121,7 @@ class FirebaseBloc implements BaseBloc{
         db.child(user.uid).parent!.set(<String, dynamic>{
           "username": name,
           "email": email,
-          "image": "default",
+          "is_enabled": true,
         });
       }
     });

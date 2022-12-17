@@ -1,4 +1,5 @@
 import 'package:diplome_nick/data/model/ticket.dart';
+import 'package:diplome_nick/data/utils/localization.dart';
 import 'package:diplome_nick/main.dart';
 import 'package:diplome_nick/ui/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class _TicketsFragmentState extends State<TicketsFragment> {
                   },
                 );
               }
-              return const Center(child: Text("EMPTY LIST"));
+              return Center(child: Text(AppLocalizations.of(context, 'empty_request')));
             }
             return const LoadingView();
           },

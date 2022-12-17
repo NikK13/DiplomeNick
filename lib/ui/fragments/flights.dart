@@ -65,7 +65,7 @@ class _FlightsFragmentState extends State<FlightsFragment> {
                   },
                 );
               }
-              return const Center(child: Text("EMPTY LIST"));
+              return Center(child: Text(AppLocalizations.of(context, 'empty_request')));
             }
             return const LoadingView();
           },
