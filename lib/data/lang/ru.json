@@ -1,4 +1,5 @@
 {
+  "all": "Все",
   "account_create": "Нет аккаунта? Создайте",
   "account_exists": "Уже есть. Войти в аккаунт",
   "add_flight": "Добавить рейс",
@@ -48,6 +49,7 @@
   "theme_dark": "Темная",
   "theme_light": "Светлая",
   "theme_system": "Системная",
+  "tickets_out": "Билетов больше нет",
   "tickets_left": "билетов осталось",
   "tickets_search": "Поиск авиабилетов",
 

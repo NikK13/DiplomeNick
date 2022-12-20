@@ -3,6 +3,7 @@ import 'package:diplome_nick/data/model/flight.dart';
 import 'package:diplome_nick/data/model/ticket.dart';
 import 'package:diplome_nick/data/model/user.dart';
 import 'package:diplome_nick/data/utils/constants.dart';
+import 'package:diplome_nick/data/utils/lists.dart';
 import 'package:diplome_nick/main.dart';
 import 'package:diplome_nick/ui/bloc/bloc.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -10,9 +11,15 @@ import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AppBloc extends BaseBloc{
-  final List<Flight> currentFlights = [];
-  final List<Ticket> currentTickets = [];
-  final List<User> currentUsers = [];
+  List<Flight> currentFlights = [];
+  List<Flight> currentTicketsFlights = [];
+  List<Ticket> currentTickets = [];
+  List<User> currentUsers = [];
+
+  String filterFlightsStart = "";
+  String filterFlightsEnd = "";
+  String filterTicketsStart = "";
+  String filterTicketsEnd = "";
 
   final _flights = BehaviorSubject<List<Flight>?>();
   final _tickets = BehaviorSubject<List<Ticket>?>();
@@ -30,35 +37,38 @@ class AppBloc extends BaseBloc{
   Function(List<Ticket>?) get loadAllTickets => _tickets.sink.add;
   Function(List<Booking>?) get loadAllBookings => _bookings.sink.add;
 
-  Future<void> callStreams() async{
-    if(currentFlights.isNotEmpty){
-      currentFlights.clear();
-    }
-    if(currentTickets.isNotEmpty){
-      currentTickets.clear();
-    }
-    if(currentUsers.isNotEmpty){
-      currentUsers.clear();
-    }
-    currentUsers.addAll((await loadUsers())!.toList());
-    currentFlights.addAll((await loadFlights())!.toList());
-    currentTickets.addAll((await loadTickets())!.toList());
-    await loadAllFlights(currentFlights);
-    await loadAllTickets(currentTickets);
-    await loadAllUsers(currentUsers);
+  Future<void> callUsersStreams() async{
+    await loadAllUsers(null);
+    final users = (await loadUsers())!.toList();
+    currentUsers = users;
+    await loadAllUsers(users);
+  }
+
+  callFlightsStream([String? start, String? end]) async{
+    await loadAllFlights(null);
+    final flights = (await loadFlights(start, end))!.toList();
+    currentFlights = flights;
+    await loadAllFlights(flights);
+  }
+
+  callTicketsStream([String? start, String? end]) async{
+    await loadAllTickets(null);
+    final tickets = (await loadTickets(start, end))!.toList();
+    currentTickets = tickets;
+    await loadAllTickets(tickets);
   }
 
   callBookingsStreams() async{
     await loadAllBookings((await loadMyOrders(firebaseBloc.fbAuth.currentUser!.uid))!.toList());
   }
 
-  Flight? flightByTicketKey(String key) => currentFlights.
+  Flight? flightByTicketKey(String key) => currentTicketsFlights.
   firstWhere((element) => element.ticketsKey == key);
 
-  Flight? flightByKey(String key) => currentFlights.
+  Flight? flightByKey(String key) => currentTicketsFlights.
   firstWhere((element) => element.key == key);
 
-  Future<List<Ticket>?> loadTickets() async{
+  Future<List<Ticket>?> loadTickets([String? start, String? end]) async{
     final query = await FirebaseDatabase.instance.ref("tickets").once();
     if(query.snapshot.exists){
       final List<Ticket> tickets = [];
@@ -66,6 +76,41 @@ class AppBloc extends BaseBloc{
       for(var item in data){
         final ticket = Ticket.fromJson(item.key!, item.value as Map<String, dynamic>);
         tickets.add(ticket);
+      }
+      if(tickets.isNotEmpty && currentTicketsFlights.isNotEmpty){
+        tickets.sort((a,b){
+          return DateFormat(dateFormat24h).parse(currentTicketsFlights.firstWhere((element) => element.key == a.flightKey!).endDate!)
+          .isBefore(DateFormat(dateFormat24h).parse(currentTicketsFlights.firstWhere((element) => element.key == b.flightKey!).endDate!)) ?
+          (isAsAdministrator ? 1 : 0) : (isAsAdministrator ? 0 : 1);
+        });
+      }
+      if(isAsAdministrator){
+        if(start != null && end != null && currentFlights.isNotEmpty){
+          if(start.isEmpty && end.isNotEmpty){
+            final endVal = destinations.firstWhere((element) => element.value == end);
+            return tickets.where((element) => currentTicketsFlights.firstWhere((flightEl)
+            => flightEl.key == element.flightKey).titleEnd == endVal.title).toList();
+          }
+          else if(start.isNotEmpty && end.isEmpty){
+            final startVal = destinations.firstWhere((element) => element.value == start);
+            return tickets.where((element) => currentTicketsFlights.firstWhere((flightEl)
+            => flightEl.key == element.flightKey).titleStart == startVal.title).toList();
+          }
+          else if(start.isNotEmpty && end.isNotEmpty){
+            final startVal = destinations.firstWhere((element) => element.value == start);
+            final endVal = destinations.firstWhere((element) => element.value == end);
+            return tickets.where((element) => currentTicketsFlights.firstWhere((flightEl)
+            => flightEl.key == element.flightKey).titleEnd == endVal.title
+              && currentTicketsFlights.firstWhere((flightEl) => flightEl.key ==
+              element.flightKey).titleStart == startVal.title).toList();
+          }
+          else{
+            return tickets;
+          }
+        }
+        else {
+          return tickets;
+        }
       }
       return tickets;
     }
@@ -126,11 +171,39 @@ class AppBloc extends BaseBloc{
           (isAsAdministrator ? 1 : 0) : (isAsAdministrator ? 0 : 1);
         });
       }
-      if(start != null && end != null && date != null){
-        return flights.where((element) =>
-        element.titleStart == start &&
-        element.titleEnd == end &&
-        DateFormat(dateFormat).parse(element.startDate!).isAtSameMomentAs(date)).toList();
+      currentTicketsFlights = flights;
+      if(isAsAdministrator){
+        if(start != null && end != null){
+          if(start.isEmpty && end.isNotEmpty){
+            final endVal = destinations.firstWhere((element) => element.value == end);
+            return flights.where((element) => element.titleEnd == endVal.title).toList();
+          }
+          else if(start.isNotEmpty && end.isEmpty){
+            final startVal = destinations.firstWhere((element) => element.value == start);
+            return flights.where((element) => element.titleStart == startVal.title).toList();
+          }
+          else if(start.isNotEmpty && end.isNotEmpty){
+            final startVal = destinations.firstWhere((element) => element.value == start);
+            final endVal = destinations.firstWhere((element) => element.value == end);
+            return flights.where((element) => element.titleStart == startVal.title
+              && element.titleEnd == endVal.title).toList();
+          }
+          else{
+            return flights;
+          }
+        }
+        else {
+          return flights;
+        }
+      }
+      else{
+        if(start != null && end != null && date != null){
+          final startVal = destinations.firstWhere((element) => element.value == start);
+          final endVal = destinations.firstWhere((element) => element.value == end);
+          return flights.where((element) =>
+          startVal.title == element.titleStart && endVal.title == element.titleEnd &&
+          DateFormat(dateFormat).parse(element.startDate!).isAtSameMomentAs(date)).toList();
+        }
       }
       return flights;
     }
@@ -150,7 +223,8 @@ class AppBloc extends BaseBloc{
     });
     final ticketKey = await createTickets(flightsRefKey.key!, ticket);
     await flightsRef.child(flightsRefKey.key!).update({"tickets_id": ticketKey});
-    await callStreams();
+    await callFlightsStream(filterFlightsStart, filterFlightsEnd);
+    await callTicketsStream(filterTicketsStart, filterTicketsEnd);
   }
 
   Future<String> createTickets(String flightKey, Ticket ticket) async{
@@ -174,7 +248,8 @@ class AppBloc extends BaseBloc{
     await FirebaseDatabase.instance.ref("flights/$key").remove();
     await FirebaseDatabase.instance.ref("tickets/$ticketsKey").remove();
     await FirebaseDatabase.instance.ref("bookings/$key").remove();
-    await callStreams();
+    await callFlightsStream(filterFlightsStart, filterFlightsEnd);
+    await callTicketsStream(filterTicketsStart, filterTicketsEnd);
   }
 
   Future<void> cancelBook(Booking booking) async{
@@ -194,17 +269,12 @@ class AppBloc extends BaseBloc{
       "ticket_type": isBusiness ? "business" : "economic",
       "book_date": DateFormat(dateFormat24h).format(DateTime.now())
     });
-    /*final userRef = FirebaseDatabase.instance.ref("users/${firebaseBloc.fbUser!.uid}/bookings").push();
-    await userRef.set({
-      "flight_id": flightKey,
-      "ticket_type": isBusiness ? "business" : "economic",
-      "book_date": DateFormat(dateFormat24h).format(DateTime.now())
-    });*/
     final ticketsRef = FirebaseDatabase.instance.ref("tickets/$ticketsKey");
     final fieldToUpd = isBusiness ? 'business_count' : 'economic_count';
     final count = ((await ticketsRef.get()).value as Map)[fieldToUpd];
     ticketsRef.update({fieldToUpd: count - 1});
-    await callStreams();
+    await callFlightsStream();
+    await callTicketsStream();
   }
 
   Future<bool> alreadyBooked(String flightKey) async{

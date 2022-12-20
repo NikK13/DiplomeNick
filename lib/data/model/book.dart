@@ -118,7 +118,7 @@ class BookedItem extends StatelessWidget {
               onPressed: () async{
                 await appBloc.cancelBook(booking!);
                 await appBloc.callBookingsStreams();
-                await appBloc.callStreams();
+                await appBloc.callTicketsStream();
               },
               child: Text(
                 AppLocalizations.of(context, 'cancel_book'),

@@ -5,6 +5,7 @@ import 'package:diplome_nick/data/utils/extensions.dart';
 import 'package:diplome_nick/data/utils/localization.dart';
 import 'package:diplome_nick/data/utils/styles.dart';
 import 'package:diplome_nick/main.dart';
+import 'package:diplome_nick/ui/widgets/bottom_dialog.dart';
 import 'package:diplome_nick/ui/widgets/button.dart';
 import 'package:diplome_nick/ui/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -206,13 +207,33 @@ class _FlightDetailsDialogState extends State<FlightDetailsDialog> {
                     text: AppLocalizations.of(context, 'book'),
                     onPressed: () async{
                       if(selectedRadio != null){
-                        //Navigator.pop(context);
                         setState(() => _isLoading = true);
-                        await appBloc.bookTicket(
-                          flight.key!,
-                          flight.ticketsKey!,
-                          selectedRadio == 2
-                        );
+                        bool isBusiness = selectedRadio == 2;
+                        if(isBusiness){
+                          if(ticket.businessTicketsCount! > 0){
+                            await appBloc.bookTicket(
+                              flight.key!,
+                              flight.ticketsKey!,
+                              true
+                            );
+                          }
+                          else{
+                            showInfoDialog(context, AppLocalizations.of(context, 'tickets_out'));
+                          }
+                        }
+                        else{
+                          if(ticket.economicTicketsCount! > 0){
+                            await appBloc.bookTicket(
+                              flight.key!,
+                              flight.ticketsKey!,
+                              false
+                            );
+                          }
+                          else{
+                            showInfoDialog(context, AppLocalizations.of(context, 'tickets_out'));
+                          }
+                        }
+                        await appBloc.callTicketsStream();
                         setState(() => _isLoading = false);
                       }
                     }

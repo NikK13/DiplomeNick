@@ -22,12 +22,6 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
   int _currentIndex = 0;
 
   @override
-  void initState() {
-    appBloc.callStreams();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: null,

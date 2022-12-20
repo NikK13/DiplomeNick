@@ -20,6 +20,12 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
   }
 
   @override
+  void dispose() {
+    appBloc.callBookingsStreams();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(

@@ -14,9 +14,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
 class NewFlightDialog extends StatefulWidget {
-  final Function? updateList;
-
-  const NewFlightDialog({Key? key, this.updateList}) : super(key: key);
+  const NewFlightDialog({Key? key}) : super(key: key);
 
   @override
   State<NewFlightDialog> createState() => _NewFlightDialogState();
@@ -211,7 +209,6 @@ class _NewFlightDialogState extends State<NewFlightDialog> {
                       businessTicketsPrice: double.tryParse(businessPrice) ?? 0.0
                     );
                     await appBloc.addNewFlight(flight, tickets);
-                    await widget.updateList!();
                   }
                   else{
                     showInfoDialog(context, "INCORRECT DATE OR TIME PICKED");

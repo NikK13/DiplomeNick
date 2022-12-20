@@ -1,4 +1,5 @@
 {
+  "all": "All",
   "account_create": "No account? Create one",
   "account_exists": "Already have. Log in",
   "add_flight": "Add flight",
@@ -48,6 +49,7 @@
   "theme_dark": "Dark",
   "theme_light": "Light",
   "theme_system": "System",
+  "tickets_out": "No more tickets left",
   "tickets_left": "tickets left",
   "tickets_search": "Tickets search",
 

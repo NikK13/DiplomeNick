@@ -12,6 +12,13 @@ class UsersFragment extends StatefulWidget {
 }
 
 class _UsersFragmentState extends State<UsersFragment> {
+
+  @override
+  void initState() {
+    appBloc.callUsersStreams();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

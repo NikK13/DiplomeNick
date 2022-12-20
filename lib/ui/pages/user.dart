@@ -34,7 +34,8 @@ class _HomeUserPageState extends State<HomeUserPage> {
   void initState() {
     _placeStart = destinations.first;
     _placeFinish = destinations[1];
-    appBloc.callStreams();
+    appBloc.callFlightsStream();
+    appBloc.callTicketsStream();
     super.initState();
   }
 
@@ -190,7 +191,7 @@ class _HomeUserPageState extends State<HomeUserPage> {
                           if(_dateController.text.trim().isNotEmpty){
                             debugPrint("${_placeStart.title} - ${_placeFinish.title}");
                             requestFlight = appBloc.loadFlights(
-                              _placeStart.title, _placeFinish.title,
+                              _placeStart.value, _placeFinish.value,
                               DateFormat(dateFormat).parse(_dateController.text)
                             );
                             setState(() {});
